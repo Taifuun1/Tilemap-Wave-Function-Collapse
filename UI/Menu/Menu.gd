@@ -3,6 +3,8 @@ extends CanvasLayer
 #onready var waveFunctionCollapse = preload("res://Objects/Wave Function Collapse.tscn").instance()
 
 func _ready():
+	randomize()
+	
 	$InputsContainer.hide()
 	$GenerationContainer.hide()
 
@@ -18,4 +20,4 @@ func _on_New_WFC_Generation_pressed():
 	$InputsContainer.hide()
 	$GenerationContainer.show()
 	
-	$GenerationContainer/WaveFunctionCollapse.generateMap()#Vector2(24, 60))
+	$GenerationContainer/WaveFunctionCollapse.generateMap()
