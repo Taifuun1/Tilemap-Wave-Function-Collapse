@@ -2,7 +2,6 @@ extends Control
 
 func _ready():
 	$"../".set_layer(1)
-	modulate.a = 0.5
 
 func _draw():
 #	draw_rect(Rect2(Vector2(0,0), Vector2(1920, 1080)), Color(180,180,180,10))
