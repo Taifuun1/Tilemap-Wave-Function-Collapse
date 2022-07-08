@@ -64,6 +64,8 @@ func generateMap():#_gridSize):
 	yield(get_tree().create_timer(0.2), "timeout")
 	
 	while !edgeTiles.empty():
+		$CanvasLayer/EdgeTilesDraw.resetEdgeTilesDraw()
+		
 #		var _tile = edgeTiles[randi() % edgeTiles.size()]
 		var _tile = edgeTiles.front()
 		
@@ -88,11 +90,10 @@ func generateMap():#_gridSize):
 #		if typeof(_legibleTiles) == TYPE_ARRAY:
 #			pass
 		
-		
-#		update()
-		$CanvasLayer/EdgeTilesDraw.update()
+		$CanvasLayer/EdgeTilesDraw.addAllEdgeTiles(edgeTiles)
 		
 		yield(get_tree().create_timer(0.01), "timeout")
+		
 	
 	print("system config")
 
@@ -181,6 +182,8 @@ func updateGrid(_tile, _pattern, _testGrid):
 	for x in range(3):
 		for y in range(3):
 			_grid[_tile.x + (x - 1)][_tile.y + (y - 1)] = _pattern[x][y]
+			if edgeTiles.has(Vector2(x, y)):
+				edgeTiles.erase(Vector2(x, y))
 	return _grid
 
 func updateEdgeTilesForTileInGrid(_tile, _testGrid, _testEdgeTiles):
@@ -244,8 +247,8 @@ func isEdgeTileInCornerInGrid(_tile, _grid):
 			if _grid[x][y] != -1:
 				_tileCount += 1
 				if _tileCount > 1:
-					return true
-	return false
+					return false
+	return true
 
 func findAllLegibleTilesAroundTile(_tile):
 	var _legibleTiles = []
@@ -289,14 +292,8 @@ func findAllPartialPatternMatches(_partialPattern):
 	return _matches
 
 func isPartialPatternAMatch(_partialPattern, _inputPattern):
-#	print(_partialPattern)
-#	print(_inputPattern)
-#	print("")
 	for x in range(3):
 		for y in range(3):
-#			print(_partialPattern[x][y] == -1)
-#			print(_partialPattern[x][y] == _inputPattern[x][y])
-#			print("")
 			if (
 				_partialPattern[x][y] == -1 or
 				_partialPattern[x][y] == _inputPattern[x][y]
