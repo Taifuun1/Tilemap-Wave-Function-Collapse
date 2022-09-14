@@ -4,20 +4,24 @@
 [ext_resource path="res://UI/Menu/Inputs.gd" type="Script" id=2]
 [ext_resource path="res://Objects/Wave Function Collapse.tscn" type="PackedScene" id=3]
 
-[node name="CanvasLayer" type="CanvasLayer"]
+[node name="Node2D" type="Node2D"]
+
+[node name="Control" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
 script = ExtResource( 1 )
 
-[node name="StartContainer" type="MarginContainer" parent="."]
+[node name="StartContainer" type="MarginContainer" parent="Control"]
 margin_left = 100.0
 margin_top = 100.0
 margin_right = 1820.0
 margin_bottom = 980.0
 
-[node name="CenterContainer" type="CenterContainer" parent="StartContainer"]
+[node name="CenterContainer" type="CenterContainer" parent="Control/StartContainer"]
 margin_right = 1720.0
 margin_bottom = 880.0
 
-[node name="New WFC Generation" type="Button" parent="StartContainer/CenterContainer"]
+[node name="New WFC Generation" type="Button" parent="Control/StartContainer/CenterContainer"]
 margin_left = 660.0
 margin_top = 390.0
 margin_right = 1060.0
@@ -25,58 +29,62 @@ margin_bottom = 490.0
 rect_min_size = Vector2( 400, 100 )
 text = "Create new WFC generation"
 
-[node name="InputsContainer" type="MarginContainer" parent="."]
+[node name="InputsContainer" type="MarginContainer" parent="Control"]
 margin_left = 100.0
 margin_top = 100.0
 margin_right = 1820.0
 margin_bottom = 980.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="InputsContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/InputsContainer"]
 margin_right = 1720.0
 margin_bottom = 880.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="InputsContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/InputsContainer/VBoxContainer"]
 margin_right = 1720.0
 margin_bottom = 776.0
 rect_min_size = Vector2( 0, 776 )
 
-[node name="Inputs" type="ScrollContainer" parent="InputsContainer/VBoxContainer/HBoxContainer"]
+[node name="Inputs" type="ScrollContainer" parent="Control/InputsContainer/VBoxContainer/HBoxContainer"]
 margin_right = 858.0
 margin_bottom = 776.0
 rect_min_size = Vector2( 858, 0 )
 script = ExtResource( 2 )
 
-[node name="InputsList" type="VBoxContainer" parent="InputsContainer/VBoxContainer/HBoxContainer/Inputs"]
+[node name="InputsList" type="VBoxContainer" parent="Control/InputsContainer/VBoxContainer/HBoxContainer/Inputs"]
 margin_right = 858.0
 margin_bottom = 880.0
 rect_min_size = Vector2( 858, 880 )
 
-[node name="SelectedInputs" type="ScrollContainer" parent="InputsContainer/VBoxContainer/HBoxContainer"]
+[node name="SelectedInputs" type="ScrollContainer" parent="Control/InputsContainer/VBoxContainer/HBoxContainer"]
 margin_left = 862.0
 margin_right = 1720.0
 margin_bottom = 776.0
 rect_min_size = Vector2( 858, 0 )
 
-[node name="SelectedInputsList" type="VBoxContainer" parent="InputsContainer/VBoxContainer/HBoxContainer/SelectedInputs"]
+[node name="SelectedInputsList" type="VBoxContainer" parent="Control/InputsContainer/VBoxContainer/HBoxContainer/SelectedInputs"]
 margin_right = 858.0
 margin_bottom = 880.0
 rect_min_size = Vector2( 858, 880 )
 
-[node name="Button" type="Button" parent="InputsContainer/VBoxContainer"]
+[node name="Button" type="Button" parent="Control/InputsContainer/VBoxContainer"]
 margin_top = 780.0
 margin_right = 1720.0
 margin_bottom = 880.0
 rect_min_size = Vector2( 300, 100 )
 text = "Generate tilemap"
 
-[node name="GenerationContainer" type="MarginContainer" parent="."]
+[node name="GenerationContainer" type="MarginContainer" parent="Control"]
 margin_right = 1920.0
 margin_bottom = 1080.0
 
-[node name="Inputs" type="Node2D" parent="GenerationContainer"]
+[node name="Inputs" type="Node2D" parent="Control/GenerationContainer"]
 visible = false
 
-[node name="WaveFunctionCollapse" parent="GenerationContainer" instance=ExtResource( 3 )]
+[node name="WaveFunctionCollapse" parent="Control/GenerationContainer" instance=ExtResource( 3 )]
 
-[connection signal="pressed" from="StartContainer/CenterContainer/New WFC Generation" to="." method="_on_Select_Inputs_pressed"]
-[connection signal="pressed" from="InputsContainer/VBoxContainer/Button" to="." method="_on_New_WFC_Generation_pressed"]
+[node name="Camera2D" type="Camera2D" parent="Control/GenerationContainer"]
+anchor_mode = 0
+current = true
+
+[connection signal="pressed" from="Control/StartContainer/CenterContainer/New WFC Generation" to="Control" method="_on_Select_Inputs_pressed"]
+[connection signal="pressed" from="Control/InputsContainer/VBoxContainer/Button" to="Control" method="_on_New_WFC_Generation_pressed"]

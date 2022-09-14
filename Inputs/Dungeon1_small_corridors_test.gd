@@ -1,4 +1,4 @@
 extends WaveFunctionCollapseTemplate
 
 func _ready():
-	gridSize = Vector2(9,20)
+	gridSize = Vector2(9,9)

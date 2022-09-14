@@ -1,4 +1,4 @@
-extends CanvasLayer
+extends Node
 
 #onready var waveFunctionCollapse = preload("res://Objects/Wave Function Collapse.tscn").instance()
 
@@ -19,5 +19,6 @@ func _on_New_WFC_Generation_pressed():
 	
 	$InputsContainer.hide()
 	$GenerationContainer.show()
+#	$GenerationContainer/Camera2D.zoom = Vector2(2.5,2.5)
 	
 	$GenerationContainer/WaveFunctionCollapse.generateMap()

@@ -5,5 +5,4 @@
 [node name="ColorRect" type="ColorRect" parent="."]
 margin_right = 32.0
 margin_bottom = 32.0
-rect_min_size = Vector2( 32, 32 )
 color = Color( 0.996078, 0.807843, 0.168627, 0.25098 )
