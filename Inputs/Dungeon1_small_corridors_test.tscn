@@ -1,9 +1,9 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Objects/Tileset.tres" type="TileSet" id=1]
-[ext_resource path="res://Inputs/Dungeon1_small_corridors_test.gd" type="Script" id=2]
+[ext_resource path="res://Inputs/InputTemplate/InputTemplate.gd" type="Script" id=2]
 
-[node name="Dungeon1_small_corridors_test" type="TileMap"]
+[node name="Input" type="TileMap"]
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 32, 32 )
 format = 1

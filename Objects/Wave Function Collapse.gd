@@ -53,19 +53,14 @@ func generateMap():#_gridSize):
 	while !edgeTiles.empty():
 		$CanvasLayer/EdgeTilesDraw.resetEdgeTilesDraw()
 		
-#		var _tile = edgeTiles[randi() % edgeTiles.size()]
-#		var _tile = edgeTiles.front()
 		var _tile = getRandomLowestEntropyEdgeTile()
 		if _tile == null:
 			break
-		var _partialPattern = getPartialPatternForTile(_tile.position)
-#		var _matches = findAllPartialPatternMatches(_partialPattern)
-		if !isTileLegible(_tile, _partialPattern):
+		if !isTileLegible(_tile):
 			edgeTiles.erase(_tile)
 			nonLegibleTiles.append(_tile.position)
 		
 		getMatchesForEdgeTiles()
-		
 		edgeTiles.sort_custom(self, "sortToLowestEntropy")
 		
 		$CanvasLayer/EdgeTilesDraw.addAllEdgeTiles(edgeTiles)
@@ -74,30 +69,17 @@ func generateMap():#_gridSize):
 	
 	print("system config")
 
-func isTileLegible(_tile, _partialPattern):
+func isTileLegible(_tile):
 	_tile.matches.shuffle()
 	for _match in _tile.matches:
-#		var _randomMatch = _matches[randi() % _matches.size()]
 		var _legibleInputs = doesTileHaveLegibleInputs(_tile, _match)
 		if typeof(_legibleInputs) != TYPE_BOOL:
 			for _legibleTile in _legibleInputs.grid:
 				set_cellv(Vector2(_legibleTile.x, _legibleTile.y), _legibleInputs.grid[_legibleTile])
 			edgeTiles = _legibleInputs.edgeTiles.duplicate(true)
-#			for _edgeTile in _legibleInputs.edgeTiles.keys():
-#				edgeTiles[_edgeTile] = _legibleInputs.edgeTiles[_edgeTile]
-			
-#			for _edgeTile in edgeTiles:
-#				var _tileCount = doesEdgeTileHaveSixAdjacentTiles(_edgeTile)
-#				if _tileCount <= 5 or _tileCount == 9:
-#					edgeTiles.erase(_edgeTile)
-			
 			return true
 	
 	return false
-#				_grid = updateGrid(_tile, _randomMatch, _grid)
-#				drawPatternWithGrid(grid)
-#				drawPattern(_tile, _randomMatch)
-#				updateEdgeTilesForTile(_tile)
 
 
 
@@ -115,12 +97,6 @@ func doesTileHaveLegibleInputs(_tile, _randomMatch):
 	### Edgetiles to be looped through
 	var _testEdgeTiles = getEdgeTilesForTile(_tile.position, edgeTiles, _testGrid)
 	
-	### Edgetile to be changed
-#	var _newEdgeTiles = _testEdgeTiles.duplicate(true)
-	
-	### For tiles that have no match
-#	var _noMatchForTiles = []
-	
 	### Legible edgetiles loop
 	while !_testEdgeTiles.empty():
 		var _testEdgeTile = _testEdgeTiles.front()
@@ -130,22 +106,11 @@ func doesTileHaveLegibleInputs(_tile, _randomMatch):
 			_testEdgeTiles.erase(_testEdgeTile)
 #			return false
 		else:
-			if _matches.size() == 1:# and !_noMatchForTiles.has(_matches[0]):
-#				_noMatchForTiles.append(_matches[0])
+			if _matches.size() == 1:
 				_testGrid = addToTestGrid(_testEdgeTile.position, _matches[0], _testGrid)
 				_testGridTiles = addToTestGridTiles(_testEdgeTile.position, _testGridTiles)
 				_testEdgeTiles = getEdgeTilesForTile(_testEdgeTile.position, _testEdgeTiles, _testGrid)
-#				if get_cellv(_testEdgeTile) == INVALID_CELL:
-#					_testGrid[_testEdgeTile] = _testEdgeTiles[_testEdgeTile]
-#				_testGrid = updateGrid(_testEdgeTile, _matches[0], _testGrid)
-#				_newEdgeTiles = getEdgeTilesForTile(_testEdgeTile, _newEdgeTiles, _testGrid)
-#				for _edgeTile in _testEdgeTiles.keys():
-#					if !_newEdgeTiles.has(_edgeTile):
-#						_newEdgeTiles[_edgeTile] = _testEdgeTiles[_edgeTile]
-#				_testEdgeTiles = updateEdgeTilesForTileInGrid(_tile, _testGrid, _testEdgeTiles)
 			else:
-#				if !_newEdgeTiles.has(_testEdgeTile):
-#					_newEdgeTiles[_testEdgeTile] = _testEdgeTiles[_testEdgeTile]
 				_testEdgeTiles.erase(_testEdgeTile)
 	
 	### Check what the new edgetiles will be
@@ -249,46 +214,9 @@ func getMatchesForEdgeTiles():
 			else:
 				_edgeTile.matches = _matches
 				_newEdgeTiles.append(_edgeTile)
+		else:
+			_newEdgeTiles.append(_edgeTile)
 	edgeTiles = _newEdgeTiles
-
-#func updateEdgeTilesForTileInGrid(_tile, _testGrid, _testEdgeTiles):
-#	var _grid = _testGrid
-#	var _edgeTiles = _testEdgeTiles
-#	for x in range(_tile.x - 2,  _tile.x + 3):
-#		for y in range(_tile.y - 2,  _tile.y + 3):
-#			if x < 2 or y < 2 or x > gridSize.x - 3 or y > gridSize.y - 3:
-#				continue
-#			elif (
-#				x < _tile.x - 1 or
-#				x > _tile.x + 1 or
-#				y < _tile.y - 1 or
-#				y > _tile.y + 1
-#			):
-#				if _grid[x][y] == -1:
-#					if !isEdgeTileInCornerInGrid(_tile, _grid):
-#						_edgeTiles.append(Vector2(x,y))
-#					elif _edgeTiles.has(Vector2(x,y)):
-#						_edgeTiles.erase(Vector2(x,y))
-#			elif _edgeTiles.has(Vector2(x,y)):
-#				_edgeTiles.erase(Vector2(x,y))
-#	return _edgeTiles
-
-#func findAllLegibleTilesAroundTile(_tile):
-#	var _legibleTiles = []
-#	var _directions = PoolVector2Array([
-#		Vector2(0,-1),
-#		Vector2(1,-1),
-#		Vector2(1,0),
-#		Vector2(1,1),
-#		Vector2(0,1),
-#		Vector2(-1,1),
-#		Vector2(-1,0),
-#		Vector2(-1,-1)
-#	])
-#	for _direction in _directions:
-#		if edgeTiles.has(_tile + _direction):
-#			_legibleTiles.append(_tile + _direction)
-#	return _legibleTiles
 
 
 
@@ -311,7 +239,7 @@ func findAllPartialPatternMatches(_partialPattern):
 	for _input in allInputs:
 		for _inputPattern in _input:
 			var _match = isPartialPatternAMatch(_partialPattern, _inputPattern)
-			if _match and !_matches.has(_match):
+			if _match and !checkMatchesDoesntHavePattern(_partialPattern, _matches):
 				_matches.append(_inputPattern)
 	if _matches.empty():
 		return false
@@ -323,6 +251,12 @@ func isPartialPatternAMatch(_partialPattern, _inputPattern):
 			if _partialPattern[x][y] != -1 and _partialPattern[x][y] != _inputPattern[x][y]:
 				return false
 	return true
+
+func checkMatchesDoesntHavePattern(_newInputPattern, _array):
+	for _inputPattern in _array:
+		if checkIfInputsAreEqual(_newInputPattern, _inputPattern):
+			return true
+	return false
 
 
 
@@ -348,25 +282,78 @@ func drawPatternWithGrid(_grid):
 func getAllInputs():
 	var _allInputs = []
 	for _inputNode in $"../Inputs".get_children():
-		var _newInput = []
-		for x in range(1, _inputNode.gridSize.x - 1):
-			for y in range(1, _inputNode.gridSize.y - 1):
-				_newInput.append(getInputPatterns(_inputNode, x, y))
-		_allInputs.append(_newInput)
+		_inputNode.create()
+		var _input = createNodeInputGrid(_inputNode)
+		for _i in range(4):
+			var _newInputPatterns = getInputPatterns(_input, _allInputs)
+			if !_newInputPatterns.empty():
+				_allInputs.append(_newInputPatterns)
+			_input = turnInput(_input)
+		
 	return _allInputs
 
-func getInputPatterns(_inputNode, x, y):
+func createNodeInputGrid(_inputNode):
+	var _input = []
+	for x in range(_inputNode.gridSize.x):
+		_input.append([])
+		for y in range(_inputNode.gridSize.y):
+			_input[x].append(_inputNode.get_cellv(Vector2(x,y)))
+	return _input
+
+func createInputGrid(_input):
+	var _inputGrid = []
+	for x in range(_input.size()):
+		_inputGrid.append([])
+		for y in range(_input[x].size()):
+			_inputGrid[x].append(_input[x][y])
+	return _inputGrid
+
+func getInputPatterns(_input, _allInputs):
+	var _newInput = []
+	for x in range(1, _input.size() - 1):
+		for y in range(1, _input[x].size() - 1):
+			var _inputPattern = getInputPatternWithGrid(_input, x, y)
+			if !checkIfInputIsAlreadyAnInput(_inputPattern, _newInput, _allInputs):
+				_newInput.append(_inputPattern)
+	return _newInput
+
+func turnInput(_input):
+	var _turnedInput = createInputGrid(_input)
+	var _inputIndex = _input.size() - 1
+	for x in _input.size():
+		for y in _input[x].size():
+			_turnedInput[x][y] = _input[y][_inputIndex]
+		_inputIndex -= 1
+	return _turnedInput
+
+func getInputPatternWithGrid(_input, x, y):
 	var _inputPattern = makeNewPattern()
 	var _inputPatternX = 0
 	var _inputPatternY = 0
 	for patternX in range(x - 1, x + 2):
 		for patternY in range(y - 1, y + 2):
-			_inputPattern[_inputPatternX][_inputPatternY] = _inputNode.get_cellv(Vector2(patternX, patternY))
+			_inputPattern[_inputPatternX][_inputPatternY] = _input[patternX][patternY]
 			_inputPatternY += 1
 		_inputPatternX += 1
 		_inputPatternY = 0
 	return _inputPattern
 
+func checkIfInputIsAlreadyAnInput(_newInputPattern, _newInput, _allInputs):
+	for _inputPattern in _newInput:
+		if checkIfInputsAreEqual(_newInputPattern, _inputPattern):
+			return true
+	for _input in _allInputs:
+		for _inputPattern in _input:
+			if checkIfInputsAreEqual(_newInputPattern, _inputPattern):
+				return true
+	return false
+
+func checkIfInputsAreEqual(_newInputPattern, _inputPattern):
+	for x in range(3):
+		for y in range(3):
+			if _newInputPattern[x][y] != _inputPattern[x][y]:
+				return false
+	return true
 
 
 ########################
@@ -390,7 +377,7 @@ func getRandomLowestEntropyEdgeTile():
 	var _lowestEntropyEdgeTiles = []
 	var _lowestEntropyEdgeTileSize = edgeTiles.front().matches.size()
 	for _edgeTile in edgeTiles:
-		if _edgeTile.matches.size() == _lowestEntropyEdgeTileSize and checkIfArrayOfClassesHasValue(_lowestEntropyEdgeTiles, "position", _edgeTile.position) == -1:
+		if _edgeTile.matches.size() <= _lowestEntropyEdgeTileSize and checkIfArrayOfClassesHasValue(_lowestEntropyEdgeTiles, "position", _edgeTile.position) == -1:
 			_lowestEntropyEdgeTiles.append(_edgeTile)
 		else:
 			break
@@ -398,7 +385,7 @@ func getRandomLowestEntropyEdgeTile():
 
 func placeCornerPatterns():
 	var _corners = PoolVector2Array([
-		Vector2(2, 2)
+		Vector2(2, 2),
 #		Vector2(2, gridSize.y - 3),
 #		Vector2(gridSize.x - 3, gridSize.y - 3),
 #		Vector2(gridSize.x - 3, 2)
@@ -406,16 +393,30 @@ func placeCornerPatterns():
 	for _corner in _corners:
 		drawPattern(_corner, getRandomPattern())
 	
-	var _partialPattern1 = getPartialPatternForTile(Vector2(3,2))
-	var _partialPattern2 = getPartialPatternForTile(Vector2(2,3))
-	var _matches1 = findAllPartialPatternMatches(_partialPattern1)
-	var _matches2 = findAllPartialPatternMatches(_partialPattern2)
-	var _initEdgeTile1 = edgeTile.new()
-	_initEdgeTile1.setValues(Vector2(3,2), _matches1)
-	var _initEdgeTile2 = edgeTile.new()
-	_initEdgeTile2.setValues(Vector2(2,3), _matches2)
-	edgeTiles.append(_initEdgeTile1)
-	edgeTiles.append(_initEdgeTile2)
+	var _edgeTiles = []
+	for _corner in _corners:
+		for x in range(_corner.x - 1,  _corner.x + 2):
+			for y in range(_corner.y - 1,  _corner.y + 2):
+				if x < 2 or y < 2 or x > gridSize.x - 3 or y > gridSize.y - 3:
+					continue
+				elif _corner == Vector2(x,y):
+					_edgeTiles.erase(_corner)
+				else:
+					var _tileCount = getEdgetileTileCount(Vector2(x,y))
+					if (_tileCount >= 3 and _tileCount != 9):
+						var _newEdgeTile = edgeTile.new()
+						_newEdgeTile.setValues(Vector2(x,y))
+						_edgeTiles.append(_newEdgeTile)
+					elif _tileCount < 3 or _tileCount == 9:
+						_edgeTiles.erase(_corner)
+	
+	for _edgeTile in _edgeTiles:
+		var _matches = findAllPartialPatternMatches(getPartialPatternForTile(_edgeTile.position))
+		if typeof(_matches) == TYPE_BOOL:
+			continue
+		_edgeTile.setValues(_edgeTile.position, _matches)
+		edgeTiles.append(_edgeTile)
+	
 	edgeTiles.shuffle()
 
 func checkIfArrayOfClassesHasValue(_array, _property, _value):

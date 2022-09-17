@@ -28,6 +28,6 @@ func _on_Add_Input_Item_Clicked(itemName):
 func _on_Remove_Input_Item_Clicked(itemName):
 	selectedInputs.erase(itemName)
 	var newItem = inputItem.instance()
-	newItem.create(itemName, false)
+	newItem.create(itemName)
 	$"InputsList".add_child(newItem)
 	get_node("../SelectedInputs/SelectedInputsList/{itemName}".format({ itemName = itemName })).queue_free()
