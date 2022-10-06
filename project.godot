@@ -23,6 +23,7 @@ _global_script_class_icons={
 config/name="Tilemap Wave Function Collapse"
 config/description="Randomly generated maps using tilemaps and wave function collapse."
 run/main_scene="res://UI/Menu/Menu.tscn"
+boot_splash/bg_color=Color( 0.141176, 0.141176, 0.141176, 1 )
 
 [display]
 
@@ -65,3 +66,4 @@ common/enable_pause_aware_picking=true
 
 environment/default_clear_color=Color( 0.0941176, 0.117647, 0.247059, 1 )
 environment/default_environment="res://default_env.tres"
+environment/bg_color=Color( 0.14, 0.14, 0.14, 1 )
