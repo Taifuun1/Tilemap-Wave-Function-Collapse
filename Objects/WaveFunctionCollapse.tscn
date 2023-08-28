@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://4rw4g0r3mlrq"]
+
+[ext_resource type="TileSet" uid="uid://c1xm4jted4hmp" path="res://Objects/World.tres" id="1"]
+[ext_resource type="Script" path="res://Objects/WaveFunctionCollapse.gd" id="2_m2kn5"]
+[ext_resource type="Script" path="res://Objects/EdgeTilesDraw.gd" id="3_asdg7"]
+
+[node name="WaveFunctionCollapse" type="TileMap"]
+tile_set = ExtResource("1")
+cell_quadrant_size = 32
+format = 2
+script = ExtResource("2_m2kn5")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="EdgeTilesDraw" type="Control" parent="CanvasLayer"]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+script = ExtResource("3_asdg7")

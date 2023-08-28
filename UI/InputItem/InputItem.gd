@@ -10,7 +10,7 @@ func create(_name, _add = true):
 	add = _add
 
 func _gui_input(event):
-	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		if add:
 			$"../.."._on_Add_Input_Item_Clicked(itemName)
 		else:

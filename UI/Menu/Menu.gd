@@ -15,10 +15,10 @@ func _on_Select_Inputs_pressed():
 func _on_New_WFC_Generation_pressed():
 	var _selectedInputs = $InputsContainer/VBoxContainer/HBoxContainer/Inputs.selectedInputs
 	for _fileName in _selectedInputs:
-		$GenerationContainer/Inputs.add_child(load("res://Inputs/{fileName}.tscn".format({ fileName = _fileName })).instance())
+		$GenerationContainer/Inputs.add_child(load("res://Inputs/{fileName}.tscn".format({ fileName = _fileName })).instantiate())
 	
 	$InputsContainer.hide()
 	$GenerationContainer.show()
 #	$GenerationContainer/Camera2D.zoom = Vector2(2.5,2.5)
 	
-	$GenerationContainer/WaveFunctionCollapse.generateMap()
+	$GenerationContainer/WaveFunctionCollapse.generateMap(3)

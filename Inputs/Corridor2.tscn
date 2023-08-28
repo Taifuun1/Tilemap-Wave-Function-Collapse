@@ -1,11 +1,10 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://dxbga6yhoc6c4"]
 
-[ext_resource path="res://Objects/World.tres" type="TileSet" id=1]
-[ext_resource path="res://Inputs/InputTemplate/InputTemplate.gd" type="Script" id=2]
+[ext_resource type="TileSet" uid="uid://c1xm4jted4hmp" path="res://Objects/World.tres" id="1"]
+[ext_resource type="Script" path="res://Inputs/InputTemplate/InputTemplate.gd" id="2"]
 
 [node name="Input" type="TileMap"]
-tile_set = ExtResource( 1 )
-cell_size = Vector2( 32, 32 )
-format = 1
-tile_data = PoolIntArray( 0, 0, 0, 1, 1, 0, 2, 0, 0, 65536, 1, 0, 65537, 1, 0, 65538, 1, 0, 131072, 0, 0, 131073, 1, 0, 131074, 0, 0 )
-script = ExtResource( 2 )
+tile_set = ExtResource("1")
+format = 2
+layer_0/tile_data = PackedInt32Array(0, 0, 0, 1, 1, 0, 2, 0, 0, 65536, 1, 0, 65537, 1, 0, 65538, 1, 0, 131072, 0, 0, 131073, 1, 0, 131074, 0, 0)
+script = ExtResource("2")
