@@ -1,7 +1,5 @@
 extends Node
 
-#onready var waveFunctionCollapse = preload("res://Objects/Wave Function Collapse.tscn").instance()
-
 func _ready():
 	randomize()
 	
@@ -19,6 +17,6 @@ func _on_New_WFC_Generation_pressed():
 	
 	$InputsContainer.hide()
 	$GenerationContainer.show()
-#	$GenerationContainer/Camera2D.zoom = Vector2(2.5,2.5)
+#	$GenerationContainer/Camera2D.zoom = Vector2(0.33, 0.33)
 	
-	$GenerationContainer/WaveFunctionCollapse.generateMap(3)
+	$GenerationContainer/WaveFunctionCollapse.generateMap()

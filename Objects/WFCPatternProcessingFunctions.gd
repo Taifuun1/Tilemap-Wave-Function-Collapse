@@ -1,3 +1,10 @@
+extends WFCBaseClass
+class_name WFCPatternProcessing
+
+
+##################################
+### Pattern matching functions ###
+##################################
 
 func createNewPattern() -> PackedInt32Array:
 	var _newInputPattern = PackedInt32Array()
@@ -20,14 +27,12 @@ func getPartialPatternForTile(_tile, _generatedTiles, _testTiles = null) -> Pack
 			_i += 1
 	return _partialPattern
 
-func findAllPartialPatternMatches(_partialPattern, _allInputs):
+func findAllPartialPatternMatches(_partialPattern) -> Array:
 	var _matches = []
-	for _inputPattern in _allInputs:
+	for _inputPattern in allInputs:
 		var _match = isPartialPatternAMatch(_partialPattern, _inputPattern)
-		if _match and !checkMatchesDoesntHavePattern(_partialPattern, _matches):
+		if _match and !doesMatchesHavePattern(_partialPattern, _matches):
 			_matches.append(_inputPattern)
-	if _matches.is_empty():
-		return false
 	return _matches
 
 func isPartialPatternAMatch(_partialPattern: PackedInt32Array, _inputPattern: PackedInt32Array) -> bool:
@@ -36,13 +41,32 @@ func isPartialPatternAMatch(_partialPattern: PackedInt32Array, _inputPattern: Pa
 				return false
 	return true
 
-func checkMatchesDoesntHavePattern(_newInputPattern, _array) -> bool:
-	for _inputPattern in _array:
-		if checkIfPatternsAreEqual(_newInputPattern, _inputPattern):
+func isPatternFull(_tile, _tilesToBeChanged) -> bool:
+	var _partialPattern = getPartialPatternForTile(_tile, generatedTiles)
+	var _tileCount = 0
+	for _adjacentTileDirection in adjacentTileDirections:
+		var _adjacentTile = Vector2(_tile.x + _adjacentTileDirection.x, _tile.y + _adjacentTileDirection.y)
+		if (
+			(
+				_tilesToBeChanged.has(_adjacentTile)
+			) or
+			(
+				!_tilesToBeChanged.has(_adjacentTile) and
+				generatedTiles.has(_adjacentTile)
+			)
+		):
+			_tileCount += 1
+		else:
+			return false
+	return _tileCount == 9
+
+func doesMatchesHavePattern(_newInputPattern, _patterns) -> bool:
+	for _inputPattern in _patterns:
+		if arePatternsEqual(_newInputPattern, _inputPattern):
 			return true
 	return false
 
-func checkIfPatternsAreEqual(_newInputPattern: PackedInt32Array, _inputPattern: PackedInt32Array) -> bool:
+func arePatternsEqual(_newInputPattern: PackedInt32Array, _inputPattern: PackedInt32Array) -> bool:
 	for i in _newInputPattern.size():
 			if _newInputPattern[i] != _inputPattern[i]:
 				return false

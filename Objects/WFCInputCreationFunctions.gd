@@ -1,7 +1,28 @@
+extends WFCPatternProcessing
+class_name WFCInputCreation
+
 
 ################################
 ### Input creation functions ###
 ################################
+
+func assignAllInputs() -> void:
+	var _inputsInArray = []
+	var _inputs = []
+	
+	for _inputNode in $"../Inputs".get_children():
+		_inputNode.create()
+		var _input = createInput(_inputNode)
+		for _i in range(4):
+			var _newInputPatterns = getInputPatterns(_input, _inputsInArray)
+			if !_newInputPatterns.is_empty():
+				_inputsInArray.append(_newInputPatterns)
+			_input = turnInput(_input)
+	for _inputArray in _inputsInArray:
+		for _input in _inputArray:
+			_inputs.append(transformInputToPackedInt32Array(_input))
+	
+	allInputs = _inputs
 
 func createInput(_inputNode) -> Array:
 	var _input = []
@@ -32,12 +53,12 @@ func createInputGrid(_input) -> Array:
 ### Input pattern getter functions ###
 ######################################
 
-func getInputPatterns(_input, _allInputs) -> Array:
+func getInputPatterns(_input, _currentInputs) -> Array:
 	var _newInput = []
 	for _x in range(1, _input.size() - 1):
 		for _y in range(1, _input[_x].size() - 1):
 			var _inputPattern = getInputPattern(_input, _x, _y)
-			if typeof(_inputPattern) != TYPE_BOOL and !checkIfInputIsAlreadyAnInput(_inputPattern, _newInput, _allInputs):
+			if typeof(_inputPattern) != TYPE_BOOL and !checkIfInputIsAlreadyAnInput(_inputPattern, _newInput, _currentInputs):
 				_newInput.append(_inputPattern)
 	return _newInput
 
@@ -79,11 +100,11 @@ func transformInputToPackedInt32Array(_inputArray) -> PackedInt32Array:
 ### Checker funtions ###
 ########################
 
-func checkIfInputIsAlreadyAnInput(_newInputPattern, _newInput, _allInputs) -> bool:
+func checkIfInputIsAlreadyAnInput(_newInputPattern, _newInput, _currentInputs) -> bool:
 	for _inputPattern in _newInput:
 		if checkIfInputsAreEqual(_newInputPattern, _inputPattern):
 			return true
-	for _input in _allInputs:
+	for _input in _currentInputs:
 		for _inputPattern in _input:
 			if checkIfInputsAreEqual(_newInputPattern, _inputPattern):
 				return true

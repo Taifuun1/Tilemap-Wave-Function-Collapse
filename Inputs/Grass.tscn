@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource path="res://Objects/World.tres" type="TileSet" id=1]
 [ext_resource path="res://Inputs/InputTemplate/InputTemplate.gd" type="Script" id=2]
@@ -6,6 +6,6 @@
 [node name="Input" type="TileMap"]
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 32, 32 )
-format = 1
-tile_data = PackedInt32Array( 0, 24, 0, 1, 24, 0, 2, 24, 0, 65536, 24, 0, 65537, 24, 0, 65538, 24, 0, 131072, 24, 0, 131073, 24, 0, 131074, 24, 0 )
+format = 2
+layer_0/tile_data = PackedInt32Array( 0, 24, 0, 1, 24, 0, 2, 24, 0, 65536, 24, 0, 65537, 24, 0, 65538, 24, 0, 131072, 24, 0, 131073, 24, 0, 131074, 24, 0 )
 script = ExtResource( 2 )
