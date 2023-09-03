@@ -3,6 +3,7 @@ class_name WaveFunctionCollapse
 
 var isEdgeTileCheckDone = true
 
+
 func _ready():
 	set_process(false)
 
@@ -52,11 +53,25 @@ func isTileLegible(_tile) -> bool:
 			return true
 	return false
 
+func getMatchesForEdgeTiles() -> void:
+	var _newEdgeTiles = []
+	for _edgeTile in edgeTiles:
+		if _edgeTile.matches == null:
+			var _matches = findAllPartialPatternMatches(getPartialPatternForTile(_edgeTile.position, generatedTiles))
+			if typeof(_matches) == TYPE_BOOL and _matches == false:
+				nonLegibleTiles.append(_edgeTile.position)
+			else:
+				_edgeTile.matches = _matches
+				_newEdgeTiles.append(_edgeTile)
+		else:
+			_newEdgeTiles.append(_edgeTile)
+	edgeTiles = _newEdgeTiles
 
 
-####################################
-### Edge tile updating functions ###
-####################################
+
+#################################
+### Tile legibility functions ###
+#################################
 
 func doesTileHaveLegibleInputs(_tile, _randomMatch) -> Dictionary:
 	### Tiles to be changed
@@ -90,6 +105,32 @@ func doesTileHaveLegibleInputs(_tile, _randomMatch) -> Dictionary:
 			"remove": _newTestEdgeTiles.remove
 		}
 	}
+
+func addToTilesToBeChanged(_tile, _pattern, _currentTestTiles = {}) -> Dictionary:
+	var _testTiles = _currentTestTiles.duplicate(true)
+	var _i = 0
+	for _x in range(-1, 2):
+		for _y in range(-1, 2):
+			var _checkedTile = Vector2(_tile.x + _x, _tile.y + _y)
+			if (
+				!_testTiles.has(_checkedTile) and
+				!generatedTiles.has(_checkedTile) and
+				helperFunctions.isTileInsideGrid(_checkedTile, gridSize)
+			):
+				_testTiles[_checkedTile] = _pattern[_i]
+			_i += 1
+	return _testTiles
+
+func addToTilesToBeCheckedForEdgeTiles(_tile, _currentEdgeTiles = {}) -> Dictionary:
+	var _newEdgeTiles = _currentEdgeTiles.duplicate(true)
+	for x in range(-2, 3):
+		for y in range(-2, 3):
+			var _checkedTile = Vector2(_tile.x + x, _tile.y + y)
+			if !_newEdgeTiles.has(_checkedTile):
+				var _edgeTile = edgeTile.edgeTile.new()
+				_edgeTile.setValues(_checkedTile)
+				_newEdgeTiles[_checkedTile] = _edgeTile
+	return _newEdgeTiles
 
 func getEdgeTilesForTile(_tile, _tilesToBeChanged, _currentEdgeTiles) -> Array:
 	var _newEdgeTiles = _currentEdgeTiles.duplicate(true)
@@ -168,46 +209,6 @@ func getNewEdgeTiles(_tilesToBeChanged, _tilesToBeCheckedForEdgeTiles) -> Dictio
 		"add": _newAddTestEdgeTiles,
 		"remove": _newRemoveTestEdgeTiles
 	}
-
-func addToTilesToBeChanged(_tile, _pattern, _currentTestTiles = {}) -> Dictionary:
-	var _testTiles = _currentTestTiles.duplicate(true)
-	var _i = 0
-	for _x in range(-1, 2):
-		for _y in range(-1, 2):
-			var _checkedTile = Vector2(_tile.x + _x, _tile.y + _y)
-			if (
-				!_testTiles.has(_checkedTile) and
-				!generatedTiles.has(_checkedTile) and
-				helperFunctions.isTileInsideGrid(_checkedTile, gridSize)
-			):
-				_testTiles[_checkedTile] = _pattern[_i]
-			_i += 1
-	return _testTiles
-
-func addToTilesToBeCheckedForEdgeTiles(_tile, _currentEdgeTiles = {}) -> Dictionary:
-	var _newEdgeTiles = _currentEdgeTiles.duplicate(true)
-	for x in range(-2, 3):
-		for y in range(-2, 3):
-			var _checkedTile = Vector2(_tile.x + x, _tile.y + y)
-			if !_newEdgeTiles.has(_checkedTile):
-				var _edgeTile = edgeTile.edgeTile.new()
-				_edgeTile.setValues(_checkedTile)
-				_newEdgeTiles[_checkedTile] = _edgeTile
-	return _newEdgeTiles
-
-func getMatchesForEdgeTiles() -> void:
-	var _newEdgeTiles = []
-	for _edgeTile in edgeTiles:
-		if _edgeTile.matches == null:
-			var _matches = findAllPartialPatternMatches(getPartialPatternForTile(_edgeTile.position, generatedTiles))
-			if typeof(_matches) == TYPE_BOOL and _matches == false:
-				nonLegibleTiles.append(_edgeTile.position)
-			else:
-				_edgeTile.matches = _matches
-				_newEdgeTiles.append(_edgeTile)
-		else:
-			_newEdgeTiles.append(_edgeTile)
-	edgeTiles = _newEdgeTiles
 
 
 ################################

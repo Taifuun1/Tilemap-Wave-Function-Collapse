@@ -12,7 +12,7 @@ func assignAllInputs() -> void:
 	
 	for _inputNode in $"../Inputs".get_children():
 		_inputNode.create()
-		var _input = createInput(_inputNode)
+		var _input = createInputFromNode(_inputNode)
 		for _i in range(4):
 			var _newInputPatterns = getInputPatterns(_input, _inputsInArray)
 			if !_newInputPatterns.is_empty():
@@ -24,7 +24,7 @@ func assignAllInputs() -> void:
 	
 	allInputs = _inputs
 
-func createInput(_inputNode) -> Array:
+func createInputFromNode(_inputNode) -> Array:
 	var _input = []
 	for x in range(_inputNode.gridSize.x):
 		_input.append([])
@@ -32,7 +32,7 @@ func createInput(_inputNode) -> Array:
 			_input[x].append(_inputNode.get_cell_source_id(0, Vector2(x,y)))
 	return _input
 
-func createNewInputPattern() -> Array:
+func createInputPattern() -> Array:
 	var _newInputPattern = []
 	for x in range(3):
 		_newInputPattern.append([])
@@ -63,7 +63,7 @@ func getInputPatterns(_input, _currentInputs) -> Array:
 	return _newInput
 
 func getInputPattern(_input, _x, _y) -> Array:
-	var _inputPattern = createNewInputPattern()
+	var _inputPattern = createInputPattern()
 	var _inputPatternX = 0
 	var _inputPatternY = 0
 	for patternX in range(_x - 1, _x + 2):
@@ -75,9 +75,9 @@ func getInputPattern(_input, _x, _y) -> Array:
 	return _inputPattern
 
 
-######################################
+#################################
 ### Input transform functions ###
-######################################
+#################################
 
 func turnInput(_input) -> Array:
 	var _turnedInput = createInputGrid(_input)
@@ -96,9 +96,9 @@ func transformInputToPackedInt32Array(_inputArray) -> PackedInt32Array:
 	return _input
 
 
-########################
-### Checker funtions ###
-########################
+##############################
+### Input Checker funtions ###
+##############################
 
 func checkIfInputIsAlreadyAnInput(_newInputPattern, _newInput, _currentInputs) -> bool:
 	for _inputPattern in _newInput:
